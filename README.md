@@ -71,10 +71,10 @@ Limitations:
 
 
 ## Installation and Setup
-You can install `s4cmd` [PyPI](https://pypi.python.org/pypi/s4cmd).
 
 ```
-pip install s4cmd
+pip install boto
+wget https://raw.githubusercontent.com/peterkuiper/s4cmd/sigv4-working/s4cmd.py
 ```
 
 - Copy or create a symbolic link so you can run `s4cmd.py` as `s4cmd`. (It is just
