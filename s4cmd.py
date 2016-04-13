@@ -491,12 +491,6 @@ class S3Handler(object):
   def connect(self):
     '''Connect to S3 storage'''
 
-    if self.opt.sigv4 is True:
-      if not boto.config.has_section('s3'):
-        boto.config.add_section('s3')
-      debug("Set s3.use-sigv4 to True");
-      boto.config.set('s3', 'use-sigv4', 'True')
-
     if self.opt.endpoint_url is not None:
       debug("Set endpoint url to %s", self.opt.endpoint_url);
       host = self.opt.endpoint_url
@@ -1412,9 +1406,6 @@ if __name__ == '__main__':
       action = 'store_true', default = False)
   parser.add_option(
       '--debug', help = 'debug output', dest = 'debug',
-      action = 'store_true', default = False)
-  parser.add_option(
-      '--sigv4', help = 'Enable AWS Version 4 signing', dest = 'sigv4',
       action = 'store_true', default = False)
   parser.add_option(
       '--endpoint-url', help = 'Set AWS endpoint url', dest = 'endpoint_url',
