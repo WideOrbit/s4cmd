@@ -67,6 +67,8 @@ TEMP_FILES = set()
 S3_ACCESS_KEY_NAME = "S3_ACCESS_KEY"
 S3_SECRET_KEY_NAME = "S3_SECRET_KEY"
 
+# Canned S3 ACLs
+S3_CANNED_ACLS = [ 'public-read' ]
 
 ##
 ## Utility classes
@@ -1169,8 +1171,15 @@ class ThreadUtil(S3Handler, ThreadPool.Worker):
 
     if not self.opt.dry_run:
       bucket = self.s3.lookup(source_url.bucket, validate=self.opt.validate)
-      key = bucket.get_key(source_url.path)
-      key.copy(target_url.bucket, target_url.path)
+
+      key_source = bucket.get_key(source_url.path)
+      key_source.copy(target_url.bucket, target_url.path)
+
+      if self.opt.acl in S3_CANNED_ACLS:
+        debug("Set acl to %s", self.opt.acl)
+        key_target = bucket.get_key(target_url.path)
+        key_target.set_canned_acl(self.opt.acl)
+
       if delete_source:
         key.delete()
     message('%s => %s' % (source, target))
@@ -1408,10 +1417,13 @@ if __name__ == '__main__':
       '--debug', help = 'debug output', dest = 'debug',
       action = 'store_true', default = False)
   parser.add_option(
-      '--endpoint-url', help = 'Set AWS endpoint url', dest = 'endpoint_url',
+      '--endpoint-url', help = 'set AWS endpoint url', dest = 'endpoint_url',
       type = 'string', default = None)
   parser.add_option(
-      '--region', help = 'Set AWS bucket region', dest = 'region',
+      '--region', help = 'set aws bucket region', dest = 'region',
+      type = 'string', default = None)
+  parser.add_option(
+      '--acl', help = 'set acl', dest = 'acl',
       type = 'string', default = None)
   parser.add_option(
       '--validate', help = 'validate lookup operation', dest = 'validate',
