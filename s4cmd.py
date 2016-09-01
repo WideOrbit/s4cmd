@@ -1845,6 +1845,12 @@ if __name__ == '__main__':
       '--debug', help='debug output', dest='debug',
       action='store_true', default=False)
   parser.add_option(
+      '--endpoint-url', help = 'set AWS endpoint url', dest = 'endpoint_url',
+      type = 'string', default = None)
+  parser.add_option(
+      '--region', help = 'set aws bucket region', dest = 'region',
+      type = 'string', default = None)
+  parser.add_option(
       '--validate', help='(obsolete) validate lookup operation', dest='validate',
       action='store_true', default=False)
   parser.add_option(
